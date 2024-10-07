@@ -1,51 +1,139 @@
-# Context-Aware-Chatbot-Using-DialoGPT
+**Data Loading and Exploratory Data Analysis (EDA)**
 
-In this project, I aim to develop a chatbot capable of engaging in coherent, multi-turn conversations across a variety of topics while maintaining contextual awareness. By fine-tuning the pre-trained Transformer model DialoGPT using the Cornell Movie Dialogs Corpus, the chatbot will learn to generate contextually relevant and natural-sounding responses. 
+Overview
 
-The primary objectives are to:
+In this section, I will focus on loading the Cornell Movie Dialogs Corpus from the specified path and performing a comprehensive EDA. The goal is to understand the dataset's structure, content, and characteristics to inform subsequent data preprocessing and model training steps.
 
-•	Leverage advanced natural language processing techniques to create a conversational AI that can adapt to multi-turn dialogues.
+**Objectives**
 
-•	Fine-tune DialoGPT to align with the conversational style and diversity found in movie dialogues.
+Data Extraction: Unzip and load the dataset files into usable data structures.
 
-•	Evaluate the chatbot's performance in terms of response relevance, coherence, and context.
+Data Understanding: Gain insights into the dataset by exploring its components.
 
-•	Develop a user-friendly interface where users can interact with it in real-time.
+Identify Issues: Detect any anomalies, missing values, or inconsistencies.
 
-**Description of Selected Dataset**
+Inform Preprocessing: Use findings to refine our data preprocessing strategy.
 
-**The Cornell Movie Dialogs Corpus** is a collection of fictional conversations from movie scripts. Its great for training and evaluating conversational agents because of its richness and diversity in dialogue.
+**Dataset Details**
 
-**Data Source:** https://www.kaggle.com/datasets/rajathmc/cornell-moviedialog-corpus
+Path to Dataset: /content/_Cornellmoviecorpus.zip
 
-**Contents:**
+Key Files:
 
-Number of Movies: 617
+movie_lines.txt: Contains individual lines of dialogue.
 
-Number of Characters: Over 10,000
+movie_conversations.txt: Defines the conversations by listing sequences of line IDs.
+Steps
 
-Number of Conversations: Approximately 83,000
+**1. Data Loading**
+Unzip the Dataset:
 
-Number of Utterances (Lines): Around 304,000
+Extract the contents of _Cornellmoviecorpus.zip to access the dataset files.
 
-Languages: Primarily English
+Read Data Files:
 
-**Structure:**
+movie_lines.txt:
 
-movie_lines.txt: Contains individual lines of dialogue with fields:
+Load into a suitable data structure (e.g., Pandas DataFrame or dictionary).
 
-Line ID: Unique identifier for each line.
+Fields to extract:
+Line ID (lineID)
+Character ID (characterID)
+Movie ID (movieID)
+Character Name (character)
+Utterance Text (text)
 
-Character ID: Identifier for the character speaking.
+movie_conversations.txt:
+Load into a data structure that maps conversations.
 
-Movie ID: Identifier for the movie.
+Fields to extract:
 
-Character Name: Name of the character.
+Character 1 ID
+Character 2 ID
+Movie ID
+List of Utterance IDs
 
-Utterance Text: The actual dialogue line.
+**2. Data Mapping and Merging**
 
-movie_conversations.txt: Defines the conversations by listing sequences of line IDs that form each dialogue between pairs of characters.
+Create Line Dictionary:
+Map each lineID to its corresponding text.
 
-**Size of Dataset:**
+Construct Conversations:
 
-The total dataset size is approximately 20 MB in plain text format.
+Use the list of lineIDs in movie_conversations.txt to build conversations.
+
+Each conversation will be a sequence of utterances mapped from lineIDs to text.
+
+**3. Exploratory Data Analysis**
+
+3.1. Understanding Conversation Structures
+
+Conversation Lengths:
+
+Analyze the number of exchanges per conversation.
+
+Compute statistics:
+
+Total Conversations: Number of conversations in the dataset.
+
+Average Length: Average number of exchanges per conversation.
+
+Distribution: Frequency distribution of conversation lengths.
+
+3.2. Character and Movie Analysis
+Most Active Characters:
+
+Identify characters with the most lines.
+
+Character Interactions:
+Analyze which character pairs have the most conversations.
+
+Movie Distribution:
+Determine how dialogues are distributed across different movies.
+
+3.3. Utterance Analysis
+Utterance Lengths:
+
+Calculate the length of each utterance in terms of words and characters.
+
+Analyze the distribution of utterance lengths.
+
+Vocabulary Analysis:
+Build a vocabulary of all unique words.
+
+Identify the most frequent words and phrases.
+
+Compute vocabulary size.
+
+3.4. Data Quality Checks
+
+Missing Values:
+Check for any missing or null values in movie_lines.txt and movie_conversations.txt.
+
+Duplicate Entries:
+Identify any duplicate lines or conversations.
+
+Language Consistency:
+Ensure all utterances are in English.
+
+Special Characters and Encoding:
+Detect any unusual characters or encoding issues.
+
+**4. Visualization**
+
+Conversation Lengths:
+Plot a histogram to visualize the distribution of conversation lengths.
+
+Utterance Lengths:
+Create a histogram or box plot of utterance lengths.
+
+
+Word Frequency:
+Generate a word cloud of the most frequent words.
+
+Character Activity:
+Bar chart showing the top characters by the number of lines spoken.
+
+Interaction Networks (Optional):
+Visualize character interactions using network graphs.
+
