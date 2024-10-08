@@ -1,139 +1,60 @@
-**Data Loading and Exploratory Data Analysis (EDA)**
+**Preprocessing for DialoGPT Fine-Tuning**
 
 Overview
+This document outlines the preprocessing steps taken to prepare the Cornell Movie Dialogs Corpus for fine-tuning DialoGPT. These steps ensure the text data is cleaned, tokenized, padded, and structured in a way that is compatible with the DialoGPT model.
 
-In this section, I will focus on loading the Cornell Movie Dialogs Corpus from the specified path and performing a comprehensive EDA. The goal is to understand the dataset's structure, content, and characteristics to inform subsequent data preprocessing and model training steps.
+Steps Taken in Preprocessing
 
-**Objectives**
+Step 1:
 
-Data Extraction: Unzip and load the dataset files into usable data structures.
+Text Cleaning and Normalization
+Objective: Clean the dialogue text by lowercasing all characters and removing unnecessary special characters while preserving punctuation for conversational flow.
 
-Data Understanding: Gain insights into the dataset by exploring its components.
+Actions:
+Converted all text to lowercase.
+Removed special characters except for punctuation marks such as .,!?.
+Normalized white spaces.
 
-Identify Issues: Detect any anomalies, missing values, or inconsistencies.
+Step 2: 
 
-Inform Preprocessing: Use findings to refine our data preprocessing strategy.
+Stop Word Removal with Retained Pronouns and Conversational Fillers
+Objective: Remove common stop words to reduce noise while keeping important conversational elements such as pronouns and conversational fillers.
 
-**Dataset Details**
+Actions:
+Removed typical stop words (e.g., "the," "is," "at").
+Retained pronouns (e.g., "he," "she," "they") and conversational fillers (e.g., "yeah," "okay") as they are crucial for dialogue generation.
 
-Path to Dataset: /content/_Cornellmoviecorpus.zip
+Step 3: T
 
-Key Files:
+okenization Using DialoGPT’s Pre-trained Tokenizer
+Objective: Convert the cleaned and processed text into token IDs using DialoGPT’s tokenizer.
 
-movie_lines.txt: Contains individual lines of dialogue.
+Actions:
+Used Byte-Level Byte Pair Encoding (BPE) with DialoGPT’s tokenizer to convert each utterance into token IDs.
+Ensured that the text includes the necessary special tokens (e.g., end-of-sequence tokens).
 
-movie_conversations.txt: Defines the conversations by listing sequences of line IDs.
-Steps
+Step 4: 
 
-**1. Data Loading**
-Unzip the Dataset:
+Padding and Truncating Sequences
+Objective: Ensure all tokenized sequences are of uniform length by padding shorter sequences and truncating longer ones.
 
-Extract the contents of _Cornellmoviecorpus.zip to access the dataset files.
+Actions:
+Added a padding token ([PAD]) to the tokenizer.
+Applied padding to shorter sequences and truncated longer sequences to a maximum length of 50 tokens.
 
-Read Data Files:
+Step 5: 
 
-movie_lines.txt:
+Creating Attention Masks
+Objective: Create attention masks to inform the model which tokens are padding and which are real data.
 
-Load into a suitable data structure (e.g., Pandas DataFrame or dictionary).
+Actions:
+Generated attention masks, where 1 represents real tokens and 0 represents padding tokens.
 
-Fields to extract:
-Line ID (lineID)
-Character ID (characterID)
-Movie ID (movieID)
-Character Name (character)
-Utterance Text (text)
+Step 6: 
 
-movie_conversations.txt:
-Load into a data structure that maps conversations.
+Structuring the Dataset for Model Input
+Objective: Prepare the dataset in a format compatible with PyTorch for training.
 
-Fields to extract:
-
-Character 1 ID
-Character 2 ID
-Movie ID
-List of Utterance IDs
-
-**2. Data Mapping and Merging**
-
-Create Line Dictionary:
-Map each lineID to its corresponding text.
-
-Construct Conversations:
-
-Use the list of lineIDs in movie_conversations.txt to build conversations.
-
-Each conversation will be a sequence of utterances mapped from lineIDs to text.
-
-**3. Exploratory Data Analysis**
-
-3.1. Understanding Conversation Structures
-
-Conversation Lengths:
-
-Analyze the number of exchanges per conversation.
-
-Compute statistics:
-
-Total Conversations: Number of conversations in the dataset.
-
-Average Length: Average number of exchanges per conversation.
-
-Distribution: Frequency distribution of conversation lengths.
-
-3.2. Character and Movie Analysis
-Most Active Characters:
-
-Identify characters with the most lines.
-
-Character Interactions:
-Analyze which character pairs have the most conversations.
-
-Movie Distribution:
-Determine how dialogues are distributed across different movies.
-
-3.3. Utterance Analysis
-Utterance Lengths:
-
-Calculate the length of each utterance in terms of words and characters.
-
-Analyze the distribution of utterance lengths.
-
-Vocabulary Analysis:
-Build a vocabulary of all unique words.
-
-Identify the most frequent words and phrases.
-
-Compute vocabulary size.
-
-3.4. Data Quality Checks
-
-Missing Values:
-Check for any missing or null values in movie_lines.txt and movie_conversations.txt.
-
-Duplicate Entries:
-Identify any duplicate lines or conversations.
-
-Language Consistency:
-Ensure all utterances are in English.
-
-Special Characters and Encoding:
-Detect any unusual characters or encoding issues.
-
-**4. Visualization**
-
-Conversation Lengths:
-Plot a histogram to visualize the distribution of conversation lengths.
-
-Utterance Lengths:
-Create a histogram or box plot of utterance lengths.
-
-
-Word Frequency:
-Generate a word cloud of the most frequent words.
-
-Character Activity:
-Bar chart showing the top characters by the number of lines spoken.
-
-Interaction Networks (Optional):
-Visualize character interactions using network graphs.
-
+Actions:
+Created a custom PyTorch Dataset class to handle input IDs and attention masks.
+Set up a DataLoader to batch the dataset for training.
